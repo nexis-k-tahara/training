@@ -3,8 +3,6 @@
 #include <string.h>
 #include "student.h"
 
-int item;
-
 
 // グローバル変数の初期化
 Student *students = NULL;
