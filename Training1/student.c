@@ -71,7 +71,7 @@ void getValidStr(const char *prompt, char *str){
 	if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
 	    //文字列から整数への変換を試みる
 	    result = sscanf(buffer, "%d", value);
-	    if (result == 1){
+	    if (result == 1 || buffer[0] == '\n'){
 	        printf("無効な入力です。文字を入力してください。\n");
 	    } else{
 		//入力した文字列
