@@ -48,7 +48,7 @@ void getValidInt(const char *prompt, int *value) {
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
             // 文字列から整数への変換を試みる
             result = sscanf(buffer, "%d", value);
-            if (result == 1) {
+            if (result == 1 && *value >= 0) {
                 break; // 正常に整数が入力された場合
             } else {
                 printf("無効な入力です。数字を入力してください。\n");
