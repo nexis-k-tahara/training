@@ -25,5 +25,6 @@ void findStudentById(int id);
 int saveStudentsToFile(const char *filename);
 int loadStudentsFromFile(const char *filename);
 void getValidInt(const char *prompt, int *value);
+void getValidStr(const char *prompt, char *str);
 
 #endif

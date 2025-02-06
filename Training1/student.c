@@ -59,13 +59,36 @@ void getValidInt(const char *prompt, int *value) {
     }
 }
 
+//文字列入力をバリデーション付きで取得
+void getValidStr(const char *prompt, char *str){
+    int value;
+    int result;
+    char buffer[50];
+
+    while(1){
+        printf("%s",prompt);
+	//入力を文字列として取得し、チェックする
+	if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+	    //文字列から整数への変換を試みる
+	    result = sscanf(buffer, "%d", value);
+	    if (result == 1){
+	        printf("無効な入力です。文字を入力してください。\n");
+	    } else{
+		//入力した文字列
+		sscanf(buffer, "%s", str);
+		break;
+        } else{
+	    printf("入力エラーが発生しました。");
+	}
+    } 
+}
+
 // 学生を追加
 void addStudent() {
     ensureCapacity(); // 必要なら容量を拡張
 
     Student *newStudent = &students[studentCount];
-    printf("学生名を入力してください: ");
-    scanf("%s", newStudent->name);
+    getValidStr("学生名を入力してください：", newStudent->name);
 
     getValidInt("学生の年齢を入力してください: ", &newStudent->age);
     newStudent->id = studentCount + 1;
