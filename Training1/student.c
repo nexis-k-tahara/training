@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "student.h"
 
 
@@ -61,22 +62,31 @@ void getValidInt(const char *prompt, int *value) {
 
 //文字列入力をバリデーション付きで取得
 void getValidStr(const char *prompt, char *str){
-    int value;
+    int i;
     int result;
-    char buffer[50];
+    char buffer[sizeof(str)-1];
 
     while(1){
+	result = 0;
         printf("%s",prompt);
 	//入力を文字列として取得し、チェックする
 	if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-	    //文字列から整数への変換を試みる
-	    result = sscanf(buffer, "%d", &value);
-	    if (result == 1 || buffer[0] == '\n'){
+	    //改行(\n)を除去する(\0に置き換える)
+	    buffer[strcspn(buffer,"\n")] = '\0'; //strcspn 一致する文字を含まずに先頭からの文字数
+	    //取得した文字列の中身を1文字ずつチェックする
+            for (i = 0; i < sizeof(buffer); i++){
+                //数字orスペースが含まれる場合
+		if (isdigit((unsigned char)buffer[i]) || isspace((unsigned char)buffer[i])) {
+	            result = 1;
+		    break;
+		}
+            }
+	    if (result == 1 || buffer[0] == '\0'){
+		//入力が整数、あるいは未入力の場合
 	        printf("無効な入力です。文字を入力してください。\n");
 	    } else{
-		//入力した文字列
-		sscanf(buffer, "%s", str);
-		break;
+		strcpy(str,buffer);
+		break; //正常に整数が入力された場合
 	    }
         } else{
 	    printf("入力エラーが発生しました。");
