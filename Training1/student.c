@@ -63,11 +63,11 @@ void getValidInt(const char *prompt, int *value) {
 //文字列入力をバリデーション付きで取得
 void getValidStr(const char *prompt, char *str){
     int i;
-    int result;
-    char buffer[sizeof(str)-1];
+    int space;
+    char buffer[sizeof(students->name)];
 
     while(1){
-	result = 0;
+	space = 0;
         printf("%s",prompt);
 	//入力を文字列として取得し、チェックする
 	if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
@@ -77,11 +77,11 @@ void getValidStr(const char *prompt, char *str){
             for (i = 0; i < sizeof(buffer); i++){
                 //数字orスペースが含まれる場合
 		if (isdigit((unsigned char)buffer[i]) || isspace((unsigned char)buffer[i])) {
-	            result = 1;
+	            space = 1;
 		    break;
 		}
             }
-	    if (result == 1 || buffer[0] == '\0'){
+	    if (space == 1 || buffer[0] == '\0'){
 		//入力が整数、あるいは未入力の場合
 	        printf("無効な入力です。文字を入力してください。\n");
 	    } else{
