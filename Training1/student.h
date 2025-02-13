@@ -3,10 +3,11 @@
 
 #define INITIAL_CAPACITY 10 // 初期容量
 #define DATA_FILE "students.dat" // 保存ファイル名
+#define MAX_NAMELENGTH 50 // 学生名の最大サイズ
 
 typedef struct {
     int id;
-    char name[50];
+    char name[MAX_NAMELENGTH];
     int age;
 } Student;
 

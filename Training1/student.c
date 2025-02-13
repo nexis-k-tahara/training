@@ -63,30 +63,35 @@ void getValidInt(const char *prompt, int *value) {
 //文字列入力をバリデーション付きで取得
 void getValidStr(const char *prompt, char *str){
     int i;
-    int space;
-    char buffer[sizeof(students->name)];
+    int isString;
+    char buffer[MAX_NAMELENGTH];
 
     while(1){
-	space = 0;
+	isString = 1;
         printf("%s",prompt);
 	//入力を文字列として取得し、チェックする
 	if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
 	    //改行(\n)を除去する(\0に置き換える)
 	    buffer[strcspn(buffer,"\n")] = '\0'; //strcspn 一致する文字を含まずに先頭からの文字数
-	    //取得した文字列の中身を1文字ずつチェックする
-            for (i = 0; i < sizeof(buffer); i++){
-                //数字orスペースが含まれる場合
-		if (isdigit((unsigned char)buffer[i]) || isspace((unsigned char)buffer[i])) {
-	            space = 1;
-		    break;
-		}
-            }
-	    if (space == 1 || buffer[0] == '\0'){
-		//入力が整数、あるいは未入力の場合
-	        printf("無効な入力です。文字を入力してください。\n");
+	    //未入力の場合
+	    if (buffer[0] == '\0') {
+		isString = 0;
 	    } else{
+	        //取得した文字列の中身を1文字ずつチェックする
+                for (i = 0; i < sizeof(buffer); i++){
+                    //数字orスペースが含まれる場合
+		    if (isdigit((unsigned char)buffer[i]) || isspace((unsigned char)buffer[i])) {
+		        isString = 0;
+		        break;
+		    }
+                }
+	    }
+	    if (isString) {
 		strcpy(str,buffer);
 		break; //正常に整数が入力された場合
+	    } else{
+		//入力が整数、空白を含むあるいは未入力の場合
+		printf("無効な入力です。文字を入力してください。\n");
 	    }
         } else{
 	    printf("入力エラーが発生しました。");
