@@ -20,9 +20,11 @@ extern int studentCapacity; // 学生の最大登録可能数
 void initStudents();
 void cleanupStudents();
 void ensureCapacity();
+void reducedCapacity();
 void addStudent();
 void listStudents();
 void findStudentById(int id);
+void deleteStudentById(int id);
 int saveStudentsToFile(const char *filename);
 int loadStudentsFromFile(const char *filename);
 void getValidInt(const char *prompt, int *value);

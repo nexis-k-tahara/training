@@ -7,14 +7,15 @@ int main() {
     if (!loadStudentsFromFile(DATA_FILE)) {
         printf("既存のデータはありませんでした。\n");
     }
-
     int choice;
+    int id;
     do {
     printf("1. 学生を追加\n");
     printf("2. 学生一覧を表示\n");
     printf("3. 学生をIDで検索\n");
-    printf("4. 保存して終了\n");
-    getValidInt("選択してください (1-4): ", &choice);
+    printf("4. 学生を削除\n");
+    printf("5. 保存して終了\n");
+    getValidInt("選択してください (1-5): ", &choice);
 
     switch (choice) {
         case 1:
@@ -24,11 +25,13 @@ int main() {
             listStudents();
             break;
         case 3:
-            int id;
             getValidInt("検索する学生のIDを入力してください: ", &id);
             findStudentById(id);
             break;
-        case 4:
+	case 4:
+	    getValidInt("削除する学生のIDを入力してください：", &id);
+	    deleteStudentById(id);
+        case 5:
             if (saveStudentsToFile(DATA_FILE)) {
                 printf("データを保存しました。\n");
             } else {
@@ -39,7 +42,7 @@ int main() {
         default:
             printf("無効な選択です。もう一度入力してください。\n");
         }
-    } while (choice != 4);
+    } while (choice != 5);
 
     cleanupStudents(); // メモリ解放
     return 0;

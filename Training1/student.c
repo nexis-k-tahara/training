@@ -38,6 +38,21 @@ void ensureCapacity() {
     }
 }
 
+//必要ならメモリ容量を縮小
+void reducedCapacity() {
+    // 現在のメモリの1/4以下の学生登録数かつ、現在のメモリが初期メモリより多い場合
+    if (studentCount <= studentCapacity / 4 && studentCapacity > INITIAL_CAPACITY) {
+        // 学生登録数を1/2にする(不要なメモリを縮小)
+	studentCapacity /= 2;
+	Student* newStudents = realloc(students, studentCapacity * sizeof(Student));
+	if (!newStudents){
+	    fprintf(stderr, "エラー：メモリの再確保に失敗しました。\n");
+	    exit(1);
+	}
+	students = newStudents;
+    }
+}
+
 // 整数入力をバリデーション付きで取得
 void getValidInt(const char *prompt, int *value) {
     int result;
@@ -102,12 +117,24 @@ void getValidStr(const char *prompt, char *str){
 // 学生を追加
 void addStudent() {
     ensureCapacity(); // 必要なら容量を拡張
+    int addIndex = studentCount; // 登録する要素
 
-    Student *newStudent = &students[studentCount];
+    for (int i = 0; i < studentCount; i++) {
+	if (students[i].id != i + 1) {
+	    addIndex = i; // 削除された学生IDがある場合
+	    // 削除IDの要素の位置に登録するため構造体配列を後ろにずらす
+	    for (int j = studentCount; j < i; j--) {
+		students[j] = students[j - 1];
+	    }
+	    break;
+	}
+    }
+    // 登録
+    Student *newStudent = &students[addIndex];
     getValidStr("学生名を入力してください：", newStudent->name);
 
     getValidInt("学生の年齢を入力してください: ", &newStudent->age);
-    newStudent->id = studentCount + 1;
+    newStudent->id = addIndex + 1;
     studentCount++;
 
     printf("学生が追加されました: ID: %d, 名前: %s, 年齢: %d\n",
@@ -134,10 +161,36 @@ void findStudentById(int id) {
         if (students[i].id == id) {
             printf("学生が見つかりました: ID: %d, 名前: %s, 年齢: %d\n",
                    students[i].id, students[i].name, students[i].age);
-            return;
+            break;
         }
+	if (i == studentCount - 1) {
+	    printf("指定されたIDの学生は見つかりませんでした。\n");
+	}
     }
-    printf("指定されたIDの学生は見つかりませんでした。\n");
+}
+
+// 学生データの削除
+void deleteStudentById(int id){
+    for (int i = 0; i < studentCount; i++){
+	if (students[i].id == id) {
+	    // 削除学生表示用
+	    Student deleteStudent = students[i];
+	    // 合致したIDを削除し配列を詰める
+	    for (int j = i;j < studentCount - 1; j++) {
+	        students[j] = students[j + 1];
+	    }
+	    // 削除後、最後の要素を初期化する
+	    students[studentCount].id = 0;
+	    studentCount--;
+	    printf("学生を削除しました：ID: %d, 名前: %s, 年齢: %d\n",
+	           deleteStudent.id, deleteStudent.name, deleteStudent.age);
+	    reducedCapacity();
+	    break;
+	}
+	if (i == studentCount - 1) {
+	    printf("指定されたIDの学生は見つかりませんでした。\n");
+	}
+    }
 }
 
 // 学生データをファイルに保存
