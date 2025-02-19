@@ -31,6 +31,7 @@ int main() {
 	case 4:
 	    getValidInt("削除する学生のIDを入力してください：", &id);
 	    deleteStudentById(id);
+	    break;
         case 5:
             if (saveStudentsToFile(DATA_FILE)) {
                 printf("データを保存しました。\n");
