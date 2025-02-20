@@ -119,10 +119,12 @@ void addStudent() {
     ensureCapacity(); // 必要なら容量を拡張
     int addIndex = studentCount; // 登録する要素
 
+    // 削除されているIDがないか確認
     for (int i = 0; i < studentCount; i++) {
 	if (students[i].id != i + 1) {
-	    addIndex = i; // 削除された学生IDがある場合
-	    // 削除IDの要素の位置に登録するため構造体配列を後ろにずらす
+	    // 削除IDのある要素の位置を保持
+	    addIndex = i;
+	    // 削除IDの要素の位置は詰められているため構造体配列を後ろにずらす
 	    for (int j = studentCount; j < i; j--) {
 		students[j] = students[j - 1];
 	    }
@@ -157,6 +159,7 @@ void listStudents() {
 
 // IDで学生を検索
 void findStudentById(int id) {
+    getValidInt("検索する学生のIDを入力してください：",&id);
     for (int i = 0; i < studentCount; i++) {
         if (students[i].id == id) {
             printf("学生が見つかりました: ID: %d, 名前: %s, 年齢: %d\n",
@@ -171,17 +174,23 @@ void findStudentById(int id) {
 
 // 学生データの削除
 void deleteStudentById(int id){
+
+    getValidInt("削除する学生のIDを入力してください：",&id);
+    // 入力したIDが登録されているか確認
     for (int i = 0; i < studentCount; i++){
 	if (students[i].id == id) {
 	    // 削除学生表示用
 	    Student deleteStudent = students[i];
-	    // 合致したIDを削除し配列を詰める
+	    // 合致したIDと合致したIDを疑似的に削除する
 	    for (int j = i;j < studentCount - 1; j++) {
+		// 合致したIDの後ろの要素から配列を前に詰める
 	        students[j] = students[j + 1];
 	    }
-	    // 削除後、最後の要素を初期化する
-	    students[studentCount].id = 0;
+	    // 学生登録数を1減らす
 	    studentCount--;
+	    // 削除後、一番後ろの要素を初期化する
+	    memset(&students[studentCount], 0 ,sizeof(Student));
+
 	    printf("学生を削除しました：ID: %d, 名前: %s, 年齢: %d\n",
 	           deleteStudent.id, deleteStudent.name, deleteStudent.age);
 	    reducedCapacity();

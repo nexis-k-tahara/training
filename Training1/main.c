@@ -25,11 +25,9 @@ int main() {
             listStudents();
             break;
         case 3:
-            getValidInt("検索する学生のIDを入力してください: ", &id);
             findStudentById(id);
             break;
 	case 4:
-	    getValidInt("削除する学生のIDを入力してください：", &id);
 	    deleteStudentById(id);
 	    break;
         case 5:
