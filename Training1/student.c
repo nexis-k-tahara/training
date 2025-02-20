@@ -174,6 +174,8 @@ void findStudentById(int id) {
 
 // 学生データの削除
 void deleteStudentById(int id){
+    // 最終要素数を取得
+    int endIndex = studentCount - 1;
 
     getValidInt("削除する学生のIDを入力してください：",&id);
     // 入力したIDが登録されているか確認
@@ -186,10 +188,10 @@ void deleteStudentById(int id){
 		// 合致したIDの後ろの要素から配列を前に詰める
 	        students[j] = students[j + 1];
 	    }
+	    // 削除後、一番後ろの要素を初期化する
+	    memset(&students[endIndex], -1, sizeof(Student));
 	    // 学生登録数を1減らす
 	    studentCount--;
-	    // 削除後、一番後ろの要素を初期化する
-	    memset(&students[studentCount], 0 ,sizeof(Student));
 
 	    printf("学生を削除しました：ID: %d, 名前: %s, 年齢: %d\n",
 	           deleteStudent.id, deleteStudent.name, deleteStudent.age);
