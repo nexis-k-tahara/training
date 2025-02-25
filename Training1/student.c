@@ -189,7 +189,7 @@ void deleteStudentById(int id){
 	        students[j] = students[j + 1];
 	    }
 	    // 削除後、一番後ろの要素を初期化する
-	    memset(&students[endIndex], -1, sizeof(Student));
+	    memset(&students[endIndex], 0, sizeof(Student));
 	    // 学生登録数を1減らす
 	    studentCount--;
 
